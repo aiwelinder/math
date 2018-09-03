@@ -8,8 +8,11 @@ public class Const extends Expr{
 	d = dub;
     }
     
-    public String toString(){
-	return "(" + d + ")";
+    public String unparse(int prec){
+	if(d < 0 && prec > PREC_ADD_SUB){
+	    return "(" + d + ")";
+	}
+	return "" + d;
     };
     
     public Expr derivative(Var x){return new Const(0);};

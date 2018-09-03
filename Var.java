@@ -8,7 +8,7 @@ public class Var extends Expr{
 	name = nm;
     }
     
-    public String toString(){
+    public String unparse(int prec){
 	return name;
     }
     

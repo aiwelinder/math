@@ -10,11 +10,17 @@ public class Mult extends Expr{
 	f2 = factor2;
     }
     
-    public String toString(){
-	String s1 = f1.toString();
-	String s2 = f2.toString();
+    public String unparse(int prec){
+	String s1 = f1.unparse(PREC_MULT_DIV);
+	String s2 = f2.unparse(PREC_MULT_DIV + 1);
 
-	return "(" + s1 + ") * (" + s2 + ")";
+	String res = s1 + " * " + s2;
+
+	if(prec > PREC_MULT_DIV){
+	    return "(" + res + ")";
+	}
+
+	return res;
     }
     
     public Expr derivative(Var x){
@@ -23,30 +29,22 @@ public class Mult extends Expr{
     }
 
     public Expr simplify(){
-	if(f1.isConst(1)){
-	    return f2;
+	Expr s1 = f1.simplify();
+	Expr s2 = f2.simplify();
+
+	if(s1 != f1 || s2 != f2){
+	    return new Mult(s1, s2).simplify();
 	}
-	if(f2.isConst(1)){
-	    return f1;
-	}
-	if(f1.isConst(0)){
-	    return f1;
-	}
-	if(f2.isConst(0)){
-	    return f2;
-	}
+
+	if(f1.isConst(1)){return f2;}
+	if(f2.isConst(1)){return f1;}
+	if(f1.isConst(0)){return f1;}
+	if(f2.isConst(0)){return f2;}
+
 	if(f1.isConst() && f2.isConst()){
 	    return new Const(f1.getConst() * f2.getConst());
 	}
 	
-       	Expr s1 = f1.simplify();
-	Expr s2 = f2.simplify();
-
-	if(s1 == f1 && s2 == f2){
-	    return this;
-	}
-	else{
-	    return new Mult(s1, s2).simplify();
-	}
+       	return this;
     }
 };
