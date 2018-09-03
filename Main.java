@@ -21,5 +21,8 @@ class Main {
 	test1 (new Mult(x, x));
 	test1 (new Mult(x, new Const(2)));
 	test1 (new Mult(x, new Add(new Const(1), new Const(1))));
+
+	test1 (new Exp(new Mult(x, x)));
+	test1 (new Sin(new Mult(new Const(2), x)));
     };
 };
